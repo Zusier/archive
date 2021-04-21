@@ -1,4 +1,4 @@
-﻿
+
 **The Tweaking Community + My Findings and Discoveries**
 
 # **Intro**
@@ -135,7 +135,7 @@ Well, you like performance right? This is the best way to get extra performance,
 
 # **How To Overclock**
 
-This is difficult to explain without visuals but I’ll try. In your BIOS, you’ll find many settings related to voltage, C-states, CPU clocks (or ratios), and more. There are [BIOS](https://www.youtube.com/results?search_query=BIOS+tuning+guides)[ ](https://www.youtube.com/results?search_query=BIOS+tuning+guides)[tuning](https://www.youtube.com/results?search_query=BIOS+tuning+guides)[ ](https://www.youtube.com/results?search_query=BIOS+tuning+guides)[guides](https://www.youtube.com/results?search_query=BIOS+tuning+guides) that can help more than I will.
+This is difficult to explain without visuals but I’ll try. In your BIOS, you’ll find many settings related to voltage, C-states, CPU clocks (or ratios), and more. There are [BIOS](https://www.youtube.com/results?search_query=BIOS+tuning+guides)[ ](https://www.youtube.com/results?search_query=BIOS+tuning+guides)[tuning](https://www.youtube.com/results?search_query=BIOS+tuning+guides)[ ](https://www.youtube.com/results?search_query=BIOS+tuning+guides)[guides](https://www.youtube.com/results?search_query=BIOS+tuning+guides) that can help more than I will. Once you find these settings, make sure you know what they do before messing around with them, otherwise you are at risk of damaging your system. CPU clocks (or ratios) are interesting. For Ryzen, I believe some boards use clocks in 25Mhz intervals, others may be bound to BCLK (100.00Mhz x CPU ratio). For Intel, I know they are only bound to BCLK (100.00Mhz x CPU ratio). Memory may have XMP profiles that aren’t set by default, but also can be manually tuned by changing [RAM](https://en.wikipedia.org/wiki/Memory_timings)[ ](https://en.wikipedia.org/wiki/Memory_timings)[timings](https://en.wikipedia.org/wiki/Memory_timings). You can even OC your monitor using [CRU](https://www.monitortests.com/forum/Thread-Custom-Resolution-Utility-CRU) if done right by tuning the timings and refresh rate. Again, I can’t explain this very well without visuals but I hope this helps you get into the basics! There are also servers for this, like [Overclocking](https://discord.com/invite/overclock).
 
 **Windows Versions**
 
