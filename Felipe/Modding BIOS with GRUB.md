@@ -1,5 +1,4 @@
-Modding BIOS with GRUB
-
+## Modding BIOS with GRUB
 Credits to NRK, Bored, Made by Felipe
 
 GRUB can mod your motherboard and change hidden or locked settings/value in BIOS.
