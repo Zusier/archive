@@ -53,18 +53,18 @@ Intel vs. AMD average interrupt to DPC latency
 
 Run Command Prompt as admin and paste these _italicized_ commands (right click and paste only the ones you need):
 
-- To undo a command in BCDEdit, do _ **bcdedit /deletevalue X** _ (where X is useplatformclock, x2apicpolicy, etc.)
+- To undo a command in BCDEdit, do _ `bcdedit /deletevalue X` (where X is useplatformclock, x2apicpolicy, etc.)
 
-_ **bcdedit /set disabledynamictick yes** _ (Windows 8+)
+_ `bcdedit /set disabledynamictick yes` (Windows 8+)
 
 - This command forces the kernel timer to constantly poll for interrupts instead of wait for them; dynamic tick was implemented as a power saving feature for laptops but hurts desktop performance
 
-_ **bcdedit /set useplatformtick yes** _ (Windows 8+)
+_ `bcdedit /set useplatformtick yes` (Windows 8+)
 
 - Forces the clock to be backed by a platform source, no synthetic timers are allowed
 - Potentially better performance, sets timer resolution to .5 instead of .501 or .499 ms
 
-_ **bcdedit /set tscsyncpolicy** _ **[**_ **legacy | default | enhanced** _**]**(Windows 8+)
+_ `bcdedit /set tscsyncpolicy` **[**_ **legacy | default | enhanced** _**]**(Windows 8+)
 
 - Tells Windows which implementation of TSC to use, try all three and see which you prefer
 
@@ -73,7 +73,7 @@ _ **bcdedit /set tscsyncpolicy** _ **[**_ **legacy | default | enhanced** _**]**
 By disabling idle, you can force your processor to run at max clocks if you have a locked CPU that doesn&#39;t support overclocking (mostly Intel non-K SKUs). If you have a static all-core overclock then you can skip this step. This will minimize jitter caused by your CPU constantly changing clocks. Disabling idle makes your processor run very warm, so make sure you have adequate cooling. Don&#39;t use this if you have SMT/HT enabled as Windows sleeps the second logical processor of the physical processor for better performance. On Windows 10, CPU usage will show as 100% in Task Manager. Note that disabling idle in Windows does not fully disable CPU C-states.
 
 1. Run CMD as admin:
-2. _ **powercfg -attributes SUB\_PROCESSOR 5d76a2ca-e8c0-402f-a133-2158492d58ad -ATTRIB\_HIDE** _
+2. `powercfg -attributes SUB\_PROCESSOR 5d76a2ca-e8c0-402f-a133-2158492d58ad -ATTRIB\_HIDE`
 3. Open power management options in Control Panel, set your plan to &quot;Maximum Performance&quot;, open the power plan, go to advanced settings, then set &quot;Processor idle disable&quot; to &quot;Disable idle&quot; under processor power options.
 
 - Power saving has no place on a gaming machine
