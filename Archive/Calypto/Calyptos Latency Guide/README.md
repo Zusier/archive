@@ -1,6 +1,5 @@
-Calypto&#39;s Windows Latency Guide
-
-Smoother, more responsive gameplay and input
+# Calypto&#39;s Windows Latency Guide
+*Smoother, more responsive gameplay and input*
 
 Latency is the time between a cause and an effect. An example of latency is input lag, or the time between moving your mouse and the cursor moving on the screen. A good portion of latency comes from the operating system. In this guide, I list methods to decrease input lag. This guide is mostly oriented towards gamers, but would help for any realtime application on Windows. Google is your friend if you&#39;re not sure about something in this guide (avoid forums and Reddit). These tweaks aren&#39;t listed in any particular order, but they are all important, otherwise I wouldn&#39;t bother listing them. Individually, many of these tweaks probably won&#39;t produce a perceivable difference, but if you do every single tweak you will end up with a significantly more responsive system, even if you usually can&#39;t tell.
 
@@ -178,7 +177,7 @@ If you get an error when trying to run the .reg, use [PowerRun](https://www.sord
 
 Here is my config for Windows 7: [https://i.imgur.com/3BV9qnJ.png](https://i.imgur.com/3BV9qnJ.png) Windows 10 1709: [https://i.imgur.com/VsX7AtP.png](https://i.imgur.com/VsX7AtP.png)
 
-- [http://www.blackviper.com/service-configurations/](http://www.blackviper.com/service-configurations/) (function reference for services)
+- [BlackViper](http://www.blackviper.com/service-configurations/) (function reference for services)
 
 **Disable your antivirus**
 
