@@ -1,3 +1,4 @@
+
 # The Basics of Windows Services
 Windows system services are applications that start when the computer is booted and run in the background.  Services handle 
 low-level tasks that require no user interaction. There are over 200+ operating system features which implement a system service(s), to support features and functionality such as:
@@ -11,3 +12,4 @@ In addition to core services that are part of Windows, third-party applications 
 
 ## Services Architecture
 The main components of the core service architecture are the Service Control Manager (SCM), service control programs, and service applications.  The service control programs do not communicate with services directly; all communication goes through the SCM.  This architecture is precisely what makes remote administration transparent to the service control program and service applications.
+![image](https://user-images.githubusercontent.com/46111482/115791987-514ade80-a37e-11eb-9f75-b113f1a5efa0.png)
