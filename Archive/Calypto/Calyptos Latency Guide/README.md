@@ -81,18 +81,17 @@ By disabling idle, you can force your processor to run at max clocks if you have
 
 Enable idle: (less responsive, lowers temperature)
 
-_powercfg -setacvalueindex scheme\_current sub\_processor 5d76a2ca-e8c0-402f-a133-2158492d58ad 0_
+`powercfg -setacvalueindex scheme\_current sub\_processor 5d76a2ca-e8c0-402f-a133-2158492d58ad 0`
 
-_powercfg -setactive scheme\_current_
+`powercfg -setactive scheme\_current`
 
-Disable idle: (more responsive, raises temperature)
+Disable idle: (more responsive, raises temperature, may stutter)
 
-_powercfg -setacvalueindex scheme\_current sub\_processor 5d76a2ca-e8c0-402f-a133-2158492d58ad 1_
+`powercfg -setacvalueindex scheme\_current sub\_processor 5d76a2ca-e8c0-402f-a133-2158492d58ad 1`
 
-_powercfg -setactive scheme\_current_
+`powercfg -setactive scheme\_current`
 
 **SetTimerResolutionService.exe** ([by mbk1969](https://forums.guru3d.com/threads/windows-timer-resolution-tool-in-form-of-system-service.376458/))
-
 [http://www.mediafire.com/file/d8vt6ehzooah2so/SetTimerResolutionService.zip/file](http://www.mediafire.com/file/d8vt6ehzooah2so/SetTimerResolutionService.zip/file)
 
 Download and follow the instructions in the readme. Then, open services.msc (win+r) and set &quot;Set Timer Resolution&quot; service to Automatic.
@@ -104,7 +103,7 @@ Download and follow the instructions in the readme. Then, open services.msc (win
 
 **Device Manager**
 
-Open Device Manager (_devmgmt.msc_) and disable anything you&#39;re not using. Be careful not to disable something you use. Uninstalling a driver via Device Manager will most likely result in it reinstalling after reboot. In order to completely disable a driver, you must disable it instead of uninstalling. When you disable something in Device Manager, the driver is unloaded. Drivers interrupt the CPU, halting everything until the driver gets CPU time (some drivers are poorly programmed and can cause the system to halt for a very long time [stuttering]). What to disable:
+Open Device Manager (`devmgmt.msc`) and disable anything you&#39;re not using. Be careful not to disable something you use. Uninstalling a driver via Device Manager will most likely result in it reinstalling after reboot. In order to completely disable a driver, you must disable it instead of uninstalling. When you disable something in Device Manager, the driver is unloaded. Drivers interrupt the CPU, halting everything until the driver gets CPU time (some drivers are poorly programmed and can cause the system to halt for a very long time [stuttering]). What to disable:
 
 Display adapters:
 
@@ -145,25 +144,21 @@ Now click on View→Devices by connection
 
 Most gaming computers will never be connected to a printer, yet the printer service is always enabled wasting CPU cycles. The same goes for other services.
 
-The easiest way to disable services is through _services.msc_. Services can also be disabled via the registry if you run into a permissions issue using _services.msc_. In _regedit_, navigate to:
+The easiest way to disable services is through `services.msc`. Services can also be disabled via the registry if you run into a permissions issue using `services.msc`. In _regedit_, navigate to:
 
-_HKEY\_LOCAL\_MACHINE\SYSTEM\CurrentControlSet\Services\_
+`HKEY\_LOCAL\_MACHINE\SYSTEM\CurrentControlSet\Services\`
 
 From there, you can change the start type:
 
 0 = Boot
-
 1 = System
-
 2 = Automatic
-
 3 = Manual
-
 4 = Disabled
 
 Another way to disable services via the registry is simply with a .reg file. Use the &quot;Properties&quot; box in _services.msc_ to get the name of the service, then create a .reg file with entries such as:
 
-Windows Registry Editor Version 5.00
+`Windows Registry Editor Version 5.00
 
 [HKEY\_LOCAL\_MACHINE\SYSTEM\CurrentControlSet\Services\BluetoothUserService]
 
@@ -171,7 +166,7 @@ Windows Registry Editor Version 5.00
 
 [HKEY\_LOCAL\_MACHINE\SYSTEM\CurrentControlSet\Services\Spooler]
 
-&quot;Start&quot;=dword:00000004
+&quot;Start&quot;=dword:00000004`
 
 If you get an error when trying to run the .reg, use [PowerRun](https://www.sordum.org/downloads/?power-run).
 
@@ -224,7 +219,7 @@ There are numerous CPU-level bugs that can&#39;t quite be fixed with microcode r
 
 By default, Windows uses the &quot;Balanced&quot; power plan which attempts to save energy when possible. Instead, set the plan to &quot;High Performance&quot; in Control Panel→Power Options or even make a custom power plan using [PowerSettingsExplorer](https://forums.guru3d.com/threads/windows-power-plan-settings-explorer-utility.416058/). The default &quot;High Performance&quot; plan still has many energy-saving features enabled which is why it is better to create a custom plan. On W10 1803+ you may enable the &quot;Ultimate Performance&quot; power plan which is a slight step above the regular &quot;High Performance&quot; plan by pasting this command into CMD as admin:
 
-_powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61_
+`powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61`
 
 You can also use my power plan for Windows 7 which was made using the tool listed above.
 
@@ -250,7 +245,7 @@ The table below lists the possible configurations that you can tell the schedule
 
 Open regedit and go to:
 
-[HKEY\_LOCAL\_MACHINE\SYSTEM\ControlSet001\Control\PriorityControl]
+`[HKEY\_LOCAL\_MACHINE\SYSTEM\ControlSet001\Control\PriorityControl]`
 
 - Add together the decimal values you want and enter that as a decimal to the Win32PrioritySeparation key. Example: 32+4+2. (You cannot use the third column unless you use variable quantum. If you are using fixed quantum, ignore the third column.)
 - Decimal 40 theoretically would provide the most responsive input at the expense of smoothness and FPS (short, fixed, no boost). Decimal 22 should provide the smoothest gameplay. Dec 37 is a mix between 40 and 38. There is no set answer here, so feel free to try out lots of options. There is no restart required so you can leave regedit open and keep trying different values while having your game open.
