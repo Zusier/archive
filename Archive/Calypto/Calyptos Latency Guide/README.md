@@ -55,16 +55,16 @@ Run Command Prompt as admin and paste these _italicized_ commands (right click a
 
 - To undo a command in BCDEdit, do _ `bcdedit /deletevalue X` (where X is useplatformclock, x2apicpolicy, etc.)
 
-_ `bcdedit /set disabledynamictick yes` (Windows 8+)
+- `bcdedit /set disabledynamictick yes` (Windows 8+)
 
 - This command forces the kernel timer to constantly poll for interrupts instead of wait for them; dynamic tick was implemented as a power saving feature for laptops but hurts desktop performance
 
-_ `bcdedit /set useplatformtick yes` (Windows 8+)
+- `bcdedit /set useplatformtick yes` (Windows 8+)
 
 - Forces the clock to be backed by a platform source, no synthetic timers are allowed
 - Potentially better performance, sets timer resolution to .5 instead of .501 or .499 ms
 
-_ `bcdedit /set tscsyncpolicy` **[**_ **legacy | default | enhanced** _**]**(Windows 8+)
+- `bcdedit /set tscsyncpolicy` **[**_ **legacy | default | enhanced** _**]**(Windows 8+)
 
 - Tells Windows which implementation of TSC to use, try all three and see which you prefer
 
