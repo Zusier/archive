@@ -1,3 +1,4 @@
+[https://wiki.gentoo.org/wiki/Handbook:Parts/Installation/Kernel](https://wiki.gentoo.org/wiki/Handbook:Parts/Installation/Kernel)
 Make sure you compiled the [gentoo sources](https://packages.gentoo.org/packages/sys-kernel/gentoo-sources) before doing so.
 
 First list the available kernels, you may only see one.
