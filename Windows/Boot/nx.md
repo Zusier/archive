@@ -13,3 +13,6 @@ DEP requires the use of 64-bit page table entries as supported by the Physical A
 The nx option can be changed at the Edit Boot Options Menu except in one case. If DEP is supported but disabled (by setting nx to AlwaysOff), then the loader may have disabled PAE, depending mostly on the pae option. If so, changing nx at the Edit Boot Options Menu is too late to enable PAE and is therefore also too late to enable DEP.
 
 The nx option passes to the kernel as the corresponding command-line switch. Its treatment in the kernel is presently beyond the scope of this note.
+
+# Data Execution Prevention
+DEP is a memory protection that was introduced in Windows XP. In simple terms, it prevents malicous code from running in certain segments of memory known as pages.
