@@ -3,204 +3,112 @@
 :: description: Improve Privacy on Windows 10
 :: author: Zusier
 @echo off
-:: https://privacy.sexy — v0.10.2 — Thu, 06 May 2021 13:44:57 GMT
-:: Ensure admin privileges
-fltmc >nul 2>&1 || (
-    echo Administrator privileges are required.
-    PowerShell Start -Verb RunAs '%0' 2> nul || (
-        echo Right-click on the script and select "Run as administrator".
-        pause & exit 1
-    )
-    exit 0
-)
 
-
-:: ----------------------------------------------------------
-:: --------------------Clear Flash traces--------------------
-:: ----------------------------------------------------------
+:: Clean up flash
 echo --- Clear Flash traces
 rd /s /q "%APPDATA%\Macromedia\Flash Player"
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: ---------------------Clear user pins----------------------
-:: ----------------------------------------------------------
-echo --- Clear user pins
-del /f /q "%APPDATA%\Microsoft\Windows\Recent\CustomDestinations\*"
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: --------------Clear recently accessed files---------------
-:: ----------------------------------------------------------
-echo --- Clear recently accessed files
+
+:: Clean recent accessed files
 del /f /q "%APPDATA%\Microsoft\Windows\Recent\AutomaticDestinations\*"
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: ------------------Clear regedit last key------------------
-:: ----------------------------------------------------------
-echo --- Clear regedit last key
+:: Clear regedit last key
 reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit" /va /f
 reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Applets\Regedit" /va /f
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: -----------Clear list of recent programs opened-----------
-:: ----------------------------------------------------------
-echo --- Clear list of recent programs opened
+
+:: Clear list of recent programs opened
 reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRU" /va /f
 reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\LastVisitedPidlMRULegacy" /va /f
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: ----------Clear Windows Search Assistant history----------
-:: ----------------------------------------------------------
-echo --- Clear Windows Search Assistant history
+:: Clear Windows Search Assistant history
 reg delete "HKCU\Software\Microsoft\Search Assistant\ACMru" /va /f
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: ------Clear list of Recent Files Opened, by Filetype------
-:: ----------------------------------------------------------
-echo --- Clear list of Recent Files Opened, by Filetype
+
+:: Clear list of Recent Files Opened, by Filetype
 reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs" /va /f
 reg delete "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs" /va /f
 reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ComDlg32\OpenSaveMRU" /va /f
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: -----Clear windows media player recent files and URLs-----
-:: ----------------------------------------------------------
-echo --- Clear windows media player recent files and URLs
+:: Clear windows media player recent files and URLs
 reg delete "HKCU\Software\Microsoft\MediaPlayer\Player\RecentFileList" /va /f
 reg delete "HKCU\Software\Microsoft\MediaPlayer\Player\RecentURLList" /va /f
 reg delete "HKLM\SOFTWARE\Microsoft\MediaPlayer\Player\RecentFileList" /va /f
 reg delete "HKLM\SOFTWARE\Microsoft\MediaPlayer\Player\RecentURLList" /va /f
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: ------Clear Most Recent Application's Use of DirectX------
-:: ----------------------------------------------------------
-echo --- Clear Most Recent Application's Use of DirectX
+:: Clear Most Recent Application's Use of DirectX
 reg delete "HKCU\Software\Microsoft\Direct3D\MostRecentApplication" /va /f
 reg delete "HKLM\SOFTWARE\Microsoft\Direct3D\MostRecentApplication" /va /f
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: ------------Clear Windows Run MRU & typedpaths------------
-:: ----------------------------------------------------------
-echo --- Clear Windows Run MRU ^& typedpaths
+
+:: Clear Windows Run MRU & typedpaths
 reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU" /va /f
 reg delete "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths" /va /f
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: Clear Optional Component Manager and COM+ components logs-
-:: ----------------------------------------------------------
+:: Clear Optional Component Manager and COM+ components logs
 echo --- Clear Optional Component Manager and COM+ components logs
 del /f /q %SystemRoot%\comsetup.log
-:: ----------------------------------------------------------
 
-
-:: ----------------------------------------------------------
-:: ------Clear Distributed Transaction Coordinator logs------
-:: ----------------------------------------------------------
-echo --- Clear Distributed Transaction Coordinator logs
+:: Clear Distributed Transaction Coordinator logs
 del /f /q %SystemRoot%\DtcInstall.log
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: --------Clear Pending File Rename Operations logs---------
-:: ----------------------------------------------------------
-echo --- Clear Pending File Rename Operations logs
+:: Clear Pending File Rename Operations logs
 del /f /q %SystemRoot%\PFRO.log
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: ------Clear Windows Deployment Upgrade Process Logs-------
-:: ----------------------------------------------------------
-echo --- Clear Windows Deployment Upgrade Process Logs
+:: Clear Windows Deployment Upgrade Process Logs
 del /f /q %SystemRoot%\setupact.log
 del /f /q %SystemRoot%\setuperr.log
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: -----------------Clear Windows Setup Logs-----------------
-:: ----------------------------------------------------------
-echo --- Clear Windows Setup Logs
+:: Clear Windows Setup Logs
+echo Clear Windows Setup Logs
 del /f /q %SystemRoot%\setupapi.log
 del /f /q %SystemRoot%\Panther\*
 del /f /q %SystemRoot%\inf\setupapi.app.log
 del /f /q %SystemRoot%\inf\setupapi.dev.log
 del /f /q %SystemRoot%\inf\setupapi.offline.log
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: --------Clear Windows System Assessment Tool logs---------
-:: ----------------------------------------------------------
-echo --- Clear Windows System Assessment Tool logs
+
+:: Clear Windows System Assessment Tool logs
 del /f /q %SystemRoot%\Performance\WinSAT\winsat.log
-:: ----------------------------------------------------------
-
 
 :: Clear DISM (Deployment Image Servicing and Management) Logs
-echo --- Clear DISM (Deployment Image Servicing and Management) Logs
 del /f /q  %SystemRoot%\Logs\CBS\CBS.log
 del /f /q  %SystemRoot%\Logs\DISM\DISM.log
-:: ----------------------------------------------------------
 
-
-:: ----------------------------------------------------------
-:: --------Clear Server-initiated Healing Events Logs--------
-:: ----------------------------------------------------------
-echo --- Clear Server-initiated Healing Events Logs
+:: Clear Server-initiated Healing Events Logs
 del /f /q "%SystemRoot%\Logs\SIH\*"
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: ---------------Common Language Runtime Logs---------------
-:: ----------------------------------------------------------
-echo --- Common Language Runtime Logs
+
+:: Common Language Runtime Logs
 del /f /q "%LocalAppData%\Microsoft\CLR_v4.0\UsageTraces\*"
 del /f /q "%LocalAppData%\Microsoft\CLR_v4.0_32\UsageTraces\*"
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: ------------Network Setup Service Events Logs-------------
-:: ----------------------------------------------------------
-echo --- Network Setup Service Events Logs
+
+:: Network Setup Service Events Logs
 del /f /q "%SystemRoot%\Logs\NetSetup\*"
-:: ----------------------------------------------------------
 
-
-:: ----------------------------------------------------------
-:: ----------Disk Cleanup tool (Cleanmgr.exe) Logs-----------
-:: ----------------------------------------------------------
-echo --- Disk Cleanup tool (Cleanmgr.exe) Logs
+:: Disk Cleanup tool (Cleanmgr.exe) Logs-----------
 del /f /q "%SystemRoot%\System32\LogFiles\setupcln\*"
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: ----------------Clear main telemetry file-----------------
-:: ----------------------------------------------------------
-echo --- Clear main telemetry file
+:: Clear main telemetry file
 if exist "%ProgramData%\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl" (
     takeown /f "%ProgramData%\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl" /r /d y
     icacls "%ProgramData%\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtrack-Listener.etl" /grant administrators:F /t
@@ -209,45 +117,24 @@ if exist "%ProgramData%\Microsoft\Diagnosis\ETLLogs\AutoLogger\AutoLogger-Diagtr
 ) else (
     echo "Main telemetry file does not exist. Good!"
 )
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: ----------Clear Windows update and SFC scan logs----------
-:: ----------------------------------------------------------
-echo --- Clear Windows update and SFC scan logs
+:: Clear Windows update and SFC scan logs
 del /f /q %SystemRoot%\Temp\CBS\*
-:: ----------------------------------------------------------
 
-
-:: ----------------------------------------------------------
-:: ----------------Windows Update Events Logs----------------
-:: ----------------------------------------------------------
-echo --- Windows Update Events Logs
+:: Windows Update Events Logs
 del /f /q "%SystemRoot%\Logs\SIH\*"
-:: ----------------------------------------------------------
 
-
-:: ----------------------------------------------------------
-:: -------------------Windows Update Logs--------------------
-:: ----------------------------------------------------------
-echo --- Windows Update Logs
+:: Windows Update Logs
 del /f /q "%SystemRoot%\Traces\WindowsUpdate\*"
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: ------------Delete controversial default0 user------------
-:: ----------------------------------------------------------
-echo --- Delete controversial default0 user
+:: Delete  default0 user
 net user defaultuser0 /delete 2>nul
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: -------------Clear (Reset) Network Data Usage-------------
-:: ----------------------------------------------------------
-echo --- Clear (Reset) Network Data Usage
+
+:: Clear (Reset) Network Data Usage
 setlocal EnableDelayedExpansion 
     SET /A dps_service_running=0
     SC queryex "DPS"|Find "STATE"|Find /v "RUNNING">Nul||(
@@ -259,37 +146,22 @@ setlocal EnableDelayedExpansion
         net start DPS
     )
 endlocal
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: --------Disable devicecensus.exe (telemetry) task---------
-:: ----------------------------------------------------------
-echo --- Disable devicecensus.exe (telemetry) task
+:: Disable devicecensus.exe (telemetry) task
 schtasks /change /TN "Microsoft\Windows\Device Information\Device" /disable
-:: ----------------------------------------------------------
 
-
-:: ----------------------------------------------------------
-:: -------Disable devicecensus.exe (telemetry) process-------
-:: ----------------------------------------------------------
-echo --- Disable devicecensus.exe (telemetry) process
+:: Disable devicecensus.exe (telemetry) process
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\'DeviceCensus.exe'" /v "Debugger" /t REG_SZ /d "%windir%\System32\taskkill.exe" /f
-:: ----------------------------------------------------------
+
 
 
 :: Disable sending information to Customer Experience Improvement Program
-echo --- Disable sending information to Customer Experience Improvement Program
 schtasks /change /TN "Microsoft\Windows\Application Experience\ProgramDataUpdater" /disable
-:: ----------------------------------------------------------
 
 
-:: ----------------------------------------------------------
-:: -----Disable Application Impact Telemetry Agent task------
-:: ----------------------------------------------------------
-echo --- Disable Application Impact Telemetry Agent task
+:: Disable Application Impact Telemetry Agent task
 schtasks /change /TN "Microsoft\Windows\Application Experience\AitAgent" /disable
-:: ----------------------------------------------------------
 
 
 :: ----------------------------------------------------------
