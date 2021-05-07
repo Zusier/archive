@@ -7,4 +7,7 @@ P-States, also known as Power Performance States scale the current frequency and
 
 
 ## References
-- [A Minimum](https://metebalci.com/blog/a-minimum-complete-tutorial-of-cpu-power-management-c-states-and-p-states/)
+- [A Minimum Complete Tutorial of CPU Power Management](https://metebalci.com/blog/a-minimum-complete-tutorial-of-cpu-power-management-c-states-and-p-states)
+- [Processor P-States and C-States](https://www.thomas-krenn.com/en/wiki/Processor_P-states_and_C-states)
+- [C-States, P-States, and S-States](https://www.technikaffe.de/anleitung-32-c_states_p_states_s_states__energieverwaltung_erklaert]
+- [Power Management States](https://www.techjunkie.com/power-management-states-s-state-p-state)
