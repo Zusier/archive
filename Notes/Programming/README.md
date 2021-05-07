@@ -1,2 +1,0 @@
-
-![image](images/4A22819C-B21D-43AD-9F33-FF8D0EEC5DCE.png)
