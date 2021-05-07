@@ -1,4 +1,4 @@
-Applying Practice, Analyzing Situations, and Learning How to Learn
+# Applying Practice, Analyzing Situations, and Learning How to Learn
  
 What I see often, when hearing complaints or confusion, is a remarkable absence in the understanding of both the time, effort, dedication, and focus required to improve at any specific pursuit and the sacrifices and realizations one must come to when breaching skill barriers, consistency walls, and overcoming one's own flaws. When people try to learn, they do something- maybe a lot- and then expect results. Essentially, this is expecting a reward while inputting no effort. The concept of what constitutes “effort”, “dedication”, or “time investment” varies widely as each individual has put their own personal amount of time or study in for their particular field and some individuals learn much faster than others. However, I believe this is a fundamental misunderstanding of an unfixable trait- as in, slow learners will always be slow learners- and this is just not the case.
 
