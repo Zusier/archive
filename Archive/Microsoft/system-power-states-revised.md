@@ -1,7 +1,7 @@
 It may appear to the normal user as if it is either on or off, but there are many different classes of power states that are used to lower the power used when there are minimal need for it to be at full power.
 
 ## P-States
-P-States, also known as Power Performance States scale the current frequency and voltage. The number of available P-States depends on the processor.
+P-States, also known as Power Performance States scale the current frequency and voltage. The number of available P-States depends on the processor. The higher number the P-State is, the lower the frequency, voltage and power consumption will be.
 
 ## C-States
 C-States lower power usage by powering down subsystems, here is the list of C-States:
@@ -25,6 +25,9 @@ Modern CPUs have more C-States, here is a list:
 - C6: Save states before shutdown, shutdown.
 - C7: C6 but LLC (Low level cache) may be flushed.
 - C8: C7 but LLC must be flushed.
+
+## S-States
+S-States, or sleep states are OS controlled states mostly on Windows.
 
 
 ## References
