@@ -4,8 +4,27 @@ It may appear to the normal user as if it is either on or off, but there are man
 P-States, also known as Power Performance States scale the current frequency and voltage. The number of available P-States depends on the processor.
 
 ## C-States
-C-States lower power usage by powering down subsystems
+C-States lower power usage by powering down subsystems, here is the list of C-States:
 
+### Main C-States
+- C0: Active, if also at P0, operating at maximum performance.
+- C1: Halted, can resume instantaneously. P0 and up only matter at C0
+  - Core Clock: Off
+- C2: Stop-Clock, same as C1, but taking longer to resume.
+  - Core Clock: Off
+  - Temporary State before transitioning to C3
+- C3: Sleep, C2 but taking a noticably longer time to resume.
+  - Core Clock: Off
+  - [PLL](https://en.wikipedia.org/wiki/Phase-locked_loop): Off
+  - L1/L2 Cache: Flushed
+
+### Modern C-States
+In modern CPUs, there are more than just package (CPU) states and there are Core and Thread states.
+Modern CPUs have more C-States, here is a list:
+- C1E: C1, but running at the lowest frequency and voltage.
+- C6: Save states before shutdown, shutdown.
+- C7: C6 but LLC (Low level cache) may be flushed.
+- C8: C7 but LLC must be flushed.
 
 
 ## References
