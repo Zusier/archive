@@ -27,7 +27,21 @@ Modern CPUs have more C-States, here is a list:
 - C8: C7 but LLC must be flushed.
 
 ## S-States
-S-States, or sleep states are OS controlled states mostly on Windows.
+S-States, or sleep states are OS controlled states mostly on Windows. You may recognize it as Sleep or Hibernate.
+- S0: Similar to C0, this is when it is running at max performance.
+- S1: Low latency wake state
+ - Power is still provided to CPU and RAM
+ - Instructions halted
+- S2: Similar to S1
+ - CPU and System cache flushed
+ - Power to processor is shutdown
+- S3: Known as Sleep
+ - All other contexts than RAM are cleared
+ - System state is loaded into RAM
+- S4: Known as hibernate
+ - Power is cut off to all devices, including hard drives
+ - System state is loaded to file on system hard drive before shutdown, known as hiberfil.sys
+ - No power is used while in hibernation
 
 
 ## References
