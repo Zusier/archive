@@ -22,6 +22,7 @@ C-States lower power usage by powering down subsystems, here is the list of C-St
 In modern CPUs, there are more than just package (CPU) states and there are Core and Thread states.
 Modern CPUs have more C-States, here is a list:
 - C1E: C1, but running at the lowest frequency and voltage.
+- C4E/C5: Reduces voltage even more and turns off the memory cache
 - C6: Save states before shutdown, shutdown.
 - C7: C6 but LLC (Low level cache) may be flushed.
 - C8: C7 but LLC must be flushed.
@@ -50,3 +51,4 @@ S-States, or sleep states are OS controlled states mostly on Windows. You may re
 - [C-States, P-States, and S-States](https://www.technikaffe.de/anleitung-32-c_states_p_states_s_states__energieverwaltung_erklaert)
 - [Power Management States](https://www.techjunkie.com/power-management-states-s-state-p-state)
 - [ACPI - Wikipedia](https://en.wikipedia.org/wiki/Advanced_Configuration_and_Power_Interface)
+- [C-States](https://gist.github.com/wmealing/2dd2b543c4d3cff6cab7)
