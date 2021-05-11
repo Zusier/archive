@@ -3,6 +3,25 @@ It may appear to the normal user as if it is either on or off, but there are man
 ## P-States
 P-States, also known as Power Performance States scale the current frequency and voltage. The number of available P-States depends on the processor. The higher number the P-State is, the lower the frequency, voltage and power consumption will be.
 
+### Forcing P0 on Nvidia GPUs (credit: Chrometastic)
+Locking your GPU allows you to never downclock, which may cause heating issues. Do this at your own risk.
+
+**If you have any games open, close them.**
+
+Open command prompt as Admin (required)
+then cd into the NVSMI directory:
+
+`cd "C:\Program Files\NVIDIA Corporation\NVSMI\"`
+
+then run this to check your current P-State:
+
+`nvidia-smi -q -d performance`
+Usually it will show P8, you want it to say P0. If it says P0, you don't have to do this.
+
+... To be finshed at a later point in time.
+
+
+
 ## C-States
 C-States lower power usage by powering down subsystems, here is the list of C-States:
 
