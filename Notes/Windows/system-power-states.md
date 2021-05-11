@@ -47,7 +47,9 @@ S-States, or sleep states are OS controlled states mostly on Windows. You may re
 
 **How can I check what S-States my system supports?**
 By running the following command in command prompt, you will find all the states that your system supports.
+
 `powercfg /a`
+
 For ideal performance and latency, you want it to appear similar to this:
 
 <img src="images/Support S-States.png">
