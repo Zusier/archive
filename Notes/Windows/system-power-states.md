@@ -45,6 +45,15 @@ S-States, or sleep states are OS controlled states mostly on Windows. You may re
   - System state is loaded to file on system hard drive before shutdown, known as hiberfil.sys
   - No power is used while in hibernation
 
+**How can I check what S-States my system supports?**
+By running the following command in command prompt, you will find all the states that your system supports.
+`powercfg /a`
+For ideal performance and latency, you want it to appear similar to this:
+
+<img src="images/Support S-States.png">
+
+
+
 
 ## References
 - [A Minimum Complete Tutorial of CPU Power Management](https://metebalci.com/blog/a-minimum-complete-tutorial-of-cpu-power-management-c-states-and-p-states)
