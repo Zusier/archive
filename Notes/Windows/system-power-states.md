@@ -33,6 +33,7 @@ S-States, or sleep states are OS controlled states mostly on Windows. You may re
 - S1: Low latency wake state
   - Power is still provided to CPU and RAM
   - Instructions halted
+  - System will need to compatible with ACPI to comply with these feautures
 - S2: Similar to S1
   - CPU and System cache flushed
   - Power to processor is shutdown
