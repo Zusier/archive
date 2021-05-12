@@ -52,7 +52,7 @@ S-States, or sleep states are OS controlled states. You may recognize it as Slee
 - S1: Low latency wake state (Sleep)
   - Power is still provided to CPU and RAM
   - Instructions halted
-  - System will need to compatible with ACPI to comply with these feautures
+  - System will need to be compatible with ACPI to comply with these features
 - S2: Similar to S1 (Sleep)
   - CPU and System cache flushed
   - Power to processor is shutdown
