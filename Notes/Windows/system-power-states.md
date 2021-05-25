@@ -57,7 +57,7 @@ S-States, or sleep states are OS controlled states. You may recognize it as Slee
   - CPU and System cache flushed
   - Power to processor is shutdown
 - S3: Traditional Sleep/Legacy Standby (Sleep)
-  - All other contexts than RAM are cleared
+  - All other contexts other than RAM are cleared
   - System state is loaded into RAM
 - S4: Hibernation
   - Power is cut off to all devices, including hard drives
