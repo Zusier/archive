@@ -70,10 +70,6 @@ By running the following command in command prompt, you will find all the states
 
 `powercfg /a`
 
-For ideal performance and latency, you want it to appear similar to this:
-
-<img src="images/Support S-States.png">
-
 
 
 
