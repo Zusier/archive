@@ -1,7 +1,7 @@
 :: TODO: base off 19042.631
 :: Crc check before install
 
-aria2c --continue=true --continue=true --allow-overwrite=true --auto-file-renaming=false "https://www13.zippyshare.com/d/QqjYqfZU/37992/Windows.Recovery.zip" -o "WinRE.wim"
+aria2c "https://www13.zippyshare.com/d/QqjYqfZU/37992/Windows.Recovery.zip" -o "WinRE.wim"
 for /f %%N in ('hashsum /a md5 WinRE.wim') do set "MD5=%%N"
 if %MD5% equ HASHHERE (
 ) else (
