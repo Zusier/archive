@@ -71,13 +71,15 @@ powershell.exe Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\L
 ::
 ::##########################################################################################################################
 :: Specifies how the System responds when a user tries to install device driver files that are not digitally signed / 00 - Ignore / 01 - Warn / 02 - Block
-reg add "HKLM\Software\Microsoft\Driver Signing" /v "Policy" /t REG_BINARY /d "01" /f
+reg add "HKLM\Software\Microsoft\Driver Signing" /v "Policy" /t REG_BINARY /d 01 /f
 ::
 :: Prevent device metadata retrieval from the Internet / Do not automatically download manufacturers’ apps and custom icons available for your devices
 reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Device Metadata" /v "PreventDeviceMetadataFromNetwork" /t REG_DWORD /d 0 /f
 sc config "DsmSvc" start= disabled
 ::
-:: Disable Malicious Software Removal Tool offered via Windows Updates (MRT) + Disable Heartbeat Telemetry
+:: Disable Malicious Software Removal Tool offered via Windows Updates (MRT)
+:: Disable Heartbeat Telemetry
+:: https://admx.help/?Category=Windows_10_2016&Policy=Microsoft.Policies.DataCollection::AllowTelemetry
 reg add "HKLM\Software\Microsoft\RemovalTools\MpGears" /v "HeartbeatTrackingIndex" /t REG_DWORD /d 0 /f
 reg add "HKLM\Software\Microsoft\RemovalTools\MpGears" /v "SpyNetReportingLocation" /t REG_MULTI_SZ /d "" /f
 reg add "HKLM\Software\Policies\Microsoft\MRT" /v "DontOfferThroughWUAU" /t REG_DWORD /d 1 /f
@@ -332,11 +334,11 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "Loc
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "FilterAdministratorToken" /t REG_DWORD /d 1 /f
 ::
 :: https://4sysops.com/archives/mitigating-powershell-risks-with-constrained-language-mode/
-:: reg add "HKLM\System\CurrentControlSet\Control\Session Manager\Environment" /v "__PSLockDownPolicy" /t REG_SZ /d "4" /f
+:: reg add "HKLM\System\CurrentControlSet\Control\Session Manager\Environment" /v "__PSLockDownPolicy" /t REG_SZ /d 4 /f
 :: Disable Powershell Constrained Language Mode (CLM) - (revert to Full Language Mode) needs reboot
 :: setx __PSLockdownPolicy 0 /M
 :: Enable Powershell Constrained Language Mode (CLM)
-setx __PSLockdownPolicy "4" /M
+setx __PSLockdownPolicy 4 /M
 ::
 :: Always re-process Group Policy even if no changes
 :: Commented out as consumers don't typically use Domain joined computers and GPO's
@@ -472,7 +474,9 @@ reg add "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters" /v "UseDomainN
 ::
 :: Windows Update Settings
 :: Restart options - Show a reminder when we're going to restart.
-:: We use WuMgR
+:: We use WuMgR or WSUS Offline
+:: https://github.com/DavidXanatos/wumgr
+:: https://gitlab.com/wsusoffline/wsusoffline/
 reg add "HKLM\Software\Microsoft\WindowsUpdate\UX\Settings" /v "RestartNotificationsAllowed" /t REG_DWORD /d 1 /f
 :: Change active hours (18 hours) 6am to 0am - Windows Updates will not automatically restart your device during active hours
 reg add "HKLM\Software\Microsoft\WindowsUpdate\UX\Settings" /v "ActiveHoursStart" /t REG_DWORD /d 6 /f
@@ -527,6 +531,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v "fEnc
 :: sc config VSS start= demand
 :: System Protection - Disable System restore and Set the size
 reg add "HKLM\Software\Policies\Microsoft\Windows NT\SystemRestore" /v "DisableSR" /t REG_DWORD /d 1 /f
+:: We disable the System Restore Task because we use other external (and better) backup solutions like Restic or Macrium Reflect
 schtasks /Change /TN "Microsoft\Windows\SystemRestore\SR" /Disable
 vssadmin Resize ShadowStorage /For=C: /On=C: /Maxsize=320MB
 ::
@@ -546,7 +551,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WinRM\Client" /v "AllowDigest"
 :: Disabling RPC usage from a remote asset interacting with scheduled tasks
 reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Schedule" /v "DisableRpcOverTcp" /t REG_DWORD /d 1 /f
 :: Disabling RPC usage from a remote asset interacting with services
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control" /v "DisableRemoteScmEndpoints" /t REG_DWORD /d 1 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v "DisableRemoteScmEndpoints" /t REG_DWORD /d 1 /f
 ::
 :: Stop NetBIOS over TCP/IP
 wmic /interactive:off nicconfig where TcpipNetbiosOptions=0 call SetTcpipNetbios 2
@@ -670,7 +675,7 @@ reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /v "DontShowUI
 :: 1 - Disable WER logging
 reg add "HKCU\Software\Microsoft\Windows\Windows Error Reporting" /v "LoggingDisabled" /t REG_DWORD /d 1 /f
 reg add "HKLM\Software\Microsoft\Windows\Windows Error Reporting" /v "LoggingDisabled" /t REG_DWORD /d 1 /f
-
+::
 schtasks /Change /TN "Microsoft\Windows\ErrorDetails\EnableErrorDetailsUpdate" /Disable
 schtasks /Change /TN "Microsoft\Windows\Windows Error Reporting\QueueReporting" /Disable
 :: Windows Error Reporting Service
@@ -787,15 +792,6 @@ netsh advfirewall set currentprofile logging droppedconnections enable
 :: ---------------------
 netsh advfirewall set publicprofile firewallpolicy blockinboundalways,allowoutbound
 ::
-::Show known file extensions and hidden files
-:: ---------------------
-reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f
-reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t REG_DWORD /d 1 /f
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t REG_DWORD /d 1 /f
-reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowSuperHidden" /t REG_DWORD /d 1 /f
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowSuperHidden" /t REG_DWORD /d 1 /f
-::
 ::Disable 8.3 names (Mitigate Microsoft IIS tilde directory enumeration) and Last Access timestamp for files and folder (Performance)
 :: ---------------------
 fsutil behavior set disable8dot3 1
@@ -895,20 +891,29 @@ reg add "HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319" /v "SchUseStrongCrypt
 reg add "HKLM\SOFTWARE\Microsoft\.NETFramework\v4.0.30319" /v "SystemDefaultTlsVersions" /t REG_DWORD /d 1 /f
 ::
 ::##########################################################################################################################
-:: Enable and Configure Internet Browser Settings
+:: Enable and Configure MS Edge Internet Browser Settings
 ::##########################################################################################################################
 ::
-:: Enable SmartScreen for Edge
-reg add "HKCU\SOFTWARE\Policies\Microsoft\MicrosoftEdge\PhishingFilter" /v "EnabledV9" /t REG_DWORD /d 1 /f
+:: Enable/Disable SmartScreen for MS Edge
+:: We do not use Edge
+reg add "HKCU\SOFTWARE\Policies\Microsoft\MicrosoftEdge\PhishingFilter" /v "EnabledV9" /t REG_DWORD /d 0 /f
 :: Enable Notifications in IE when a site attempts to install software
 reg add "HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer" /v "SafeForScripting" /t REG_DWORD /d 0 /f
 :: Disable Edge password manager to encourage use of proper password manager
 reg add "HKCU\SOFTWARE\Policies\Microsoft\MicrosoftEdge\Main" /v "FormSuggest Passwords" /t REG_SZ /d no /f
-:: Prevent MS Edge (Chromium) auto-installation
-reg add "HKLM\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft" /v "DoNotUpdateToEdgeWithChromium" /t REG_DWORD /d 1 /f
+:: Prevent MS Edge auto-installation
+reg add "HKLM\SOFTWARE\Microsoft\EdgeUpdate" /v "DoNotUpdateToEdgeWithChromium" /t REG_DWORD /d 1 /f
+rem Google Cast, Edge trying to connect to 239.255.255.250 via UDP port 1900
+:: 0 - Disable
+:: https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-policies
+:: https://www.microsoft.com/en-us/download/details.aspx?id=55319
+reg add "HKLM\Software\Policies\Microsoft\Edge" /v "EnableMediaRouter" /t REG_DWORD /d 0 /f
+:: Disable Microsoft Edge Preloading
+:: Removed since 21H1
+:: reg add "HKLM\Software\Policies\Microsoft\MicrosoftEdge\Main" /v "AllowPrelaunch" /t REG_DWORD /d 0 /f
 ::
 ::##########################################################################################################################
-:: Enable and Configure Google Chrome Internet Browser Settings
+:: Enable and Configure Google Chrome based Internet Browser Settings
 ::##########################################################################################################################
 ::
 reg add "HKLM\SOFTWARE\Policies\Google\Chrome" /v "AdvancedProtectionAllowed" /t REG_DWORD /d 1 /f
@@ -1026,6 +1031,7 @@ reg add "HKCU\Control Panel\International\User Profile" /v "HttpAcceptLanguageOp
 :: Prevent toast notifications from appearing on lock screen
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications" /v "NoToastApplicationNotificationOnLockScreen" /t REG_DWORD /d 1 /f
 :: Hide News And Interests (depends on search)
+:: New-ItemProperty -Path HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds -Name ShellFeedsTaskbarViewMode -PropertyType DWord -Value 2 -Force
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Feeds" /v "ShellFeedsTaskbarViewMode" /t REG_DWORD /d 2 /f
 :: News and Interests Open on hover / 0 - No / 1 - Yes
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Feeds" /v "ShellFeedsTaskbarOpenOnHover" /t REG_DWORD /d 0 /f
@@ -1158,7 +1164,7 @@ powershell.exe -command "Get-AppxProvisionedPackage -Online | Where-Object {$_.D
 powershell.exe -command "Get-AppxProvisionedPackage -Online | Where-Object {$_.DisplayName -eq 'Microsoft.ZuneMusic'} | Remove-AppxProvisionedPackage -Online"
 powershell.exe -command "Get-AppxProvisionedPackage -Online | Where-Object {$_.DisplayName -eq 'Microsoft.ZuneVideo'} | Remove-AppxProvisionedPackage -Online"
 ::##########################################################################################################################
-:: Remove user account caused by an old Windows Bug (does not affect 2004+)
+:: Remove user account caused by an old Windows Bug (does not affect 1909+)
 net user defaultuser0 /delete
 net user defaultuser100000 /delete
 :: ---------------------
@@ -1204,6 +1210,14 @@ rd "%LocalAppData%\Temp" /s /q
 ::##########################################################################################################################
 :: Secure Explorer defaults
 :: ---------------------
+::Show known file extensions and hidden files
+:: ---------------------
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t REG_DWORD /d 1 /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t REG_DWORD /d 1 /f
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowSuperHidden" /t REG_DWORD /d 1 /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowSuperHidden" /t REG_DWORD /d 1 /f
 :: Enable Bluetooth ads (workaround)
 :: reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\current\device\Bluetooth" /v "AllowAdvertising" /t REG_DWORD /d 1 /f
 :: reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\current\device\Browser" /v "AllowAddressBarDropdown" /t REG_DWORD /d 1 /f
@@ -1306,7 +1320,10 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\
 reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone" /v "Value" /t REG_SZ /d "Deny" /f
 :: Allow/Deny - Allow Apps to access your microphone
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone" /v "Value" /t REG_SZ /d "Deny" /f
-:: Let apps use my microphone / 0 - Default / 1 - Enabled / 2 - Disabled
+:: Let apps use my microphone
+:: 0 - Default
+:: 1 - Enabled
+:: 2 - Disabled
 :: reg add "HKLM\Software\Policies\Microsoft\Windows\AppPrivacy" /v "LetAppsAccessMicrophone" /t REG_DWORD /d 2 /f
 :: Let apps read or send messages (text or MMS) / 0 - Default / 1 - Enabled / 2 - Disabled
 reg add "HKLM\Software\Policies\Microsoft\Windows\AppPrivacy" /v "LetAppsAccessMessaging" /t REG_DWORD /d 2 /f
@@ -1315,7 +1332,9 @@ reg add "HKLM\Software\Policies\Microsoft\Windows\AppPrivacy" /v "LetAppsAccessM
 :: reg add "HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableLocationScripting" /t REG_DWORD /d 1 /f
 :: reg add "HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableSensors" /t REG_DWORD /d 1 /f
 :: reg add "HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableWindowsLocationProvider" /t REG_DWORD /d 1 /f
-:: 0 - Default / 1 - Enabled / 2 - Disabled
+:: 0 - Default
+:: 1 - Enabled
+:: 2 - Disabled
 reg add "HKLM\Software\Policies\Microsoft\Windows\AppPrivacy" /v "LetAppsAccessLocation" /t REG_DWORD /d 0 /f
 :: reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}" /v "Value" /t REG_SZ /d "Deny" /f
 :: Allow/Deny - File system access for this device
@@ -1400,7 +1419,7 @@ reg add "HKLM\Software\Policies\Microsoft\Windows\AppPrivacy" /v "LetAppsAccessM
 :: 2 - Reduce all other by 50%
 :: 3 - Do nothing
 :: Useless because Discord and other apps can control this internally
-reg add "HKCU\Software\Microsoft\Multimedia\Audio" /v "UserDuckingPreference" /t REG_DWORD /d "3" /f
+reg add "HKCU\Software\Microsoft\Multimedia\Audio" /v "UserDuckingPreference" /t REG_DWORD /d 3 /f
 :: Delete Windows Default Sounds (Permanently)
 reg delete "HKCU\AppEvents\Schemes\Apps" /f
 :: Hide OneDrive
@@ -1509,7 +1528,7 @@ reg add "HKLM\System\CurrentControlSet\Control\Session Manager" /v "AutoChkTimeo
 :: Group Policies
 :: ---------------------
 :: Disable the warning The Publisher could not be verified
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Associations" /v "DefaultFileTypeRisk" /t REG_DWORD /d "1808 /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Associations" /v "DefaultFileTypeRisk" /t REG_DWORD /d 1808 /f
 :: Disable Security warning to unblock the downloaded file
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments" /v "SaveZoneInformation" /t REG_DWORD /d 1 /f
 :: Disable Low Disk Space Alerts
@@ -1730,7 +1749,7 @@ schtasks /Change /TN "Microsoft\Windows\Device Information\Device" /Disable
 schtasks /Change /TN "Microsoft\Windows\Device Information\Device User" /Disable
 schtasks /Change /TN "Microsoft\Windows\Diagnosis\RecommendedTroubleshootingScanner" /Disable
 schtasks /Change /TN "Microsoft\Windows\Diagnosis\Scheduled" /Disable
-schtasks /Change /TN "Microsoft\Windows\DiskCleanup\SilentCleanup" /Disable
+:: schtasks /Change /TN "Microsoft\Windows\DiskCleanup\SilentCleanup" /Disable
 :: schtasks /Change /TN "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /Disable
 :: schtasks /Change /TN "Microsoft\Windows\DiskFootprint\Diagnostics" /Disable
 :: schtasks /Change /TN "Microsoft\Windows\DiskFootprint\StorageSense" /Disable
@@ -1816,8 +1835,8 @@ sc config "AMD External Events Utility" start= disabled
 :: reg add "HKLM\SYSTEM\CurrentControlSet\Services\BluetoothUserService" /v "Start" /t REG_DWORD /d 2 /f
 :: reg add "HKLM\SYSTEM\CurrentControlSet\Services\bthserv" /v "Start" /t REG_DWORD /d 2 /f
 :: XBox Game Saves and services
-reg add "HKLM\System\CurrentControlSet\Services\BcastDVRUserService" /v "Start" /t REG_DWORD /d "4" /f
-reg add "HKLM\System\CurrentControlSet\Services\xbgm" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKLM\System\CurrentControlSet\Services\BcastDVRUserService" /v "Start" /t REG_DWORD /d 4 /f
+reg add "HKLM\System\CurrentControlSet\Services\xbgm" /v "Start" /t REG_DWORD /d 4 /f
 sc config "XblAuthManager" start= disabled
 sc config "XblGameSave" start= disabled
 sc config "XboxGipSvc" start= disabled
@@ -1828,7 +1847,7 @@ sc config "cbdhsvc" start= disabled
 :: Connected User Experiences and Telemetry
 sc config "DiagTrack" start= disabled
 :: Contact Data
-reg add "HKLM\System\CurrentControlSet\Services\PimIndexMaintenanceSvc" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKLM\System\CurrentControlSet\Services\PimIndexMaintenanceSvc" /v "Start" /t REG_DWORD /d 4 /f
 :: Data Usage
 sc config "DusmSvc" start= disabled
 :: Display Policy Service
@@ -1866,9 +1885,9 @@ sc config "lmhosts" start= disabled
 :: Touch Keyboard and Handwriting Panel Service (keeps ctfmon.exe running)
 sc config "TabletInputService" start= demand
 :: UserDataSvc
-reg add "HKLM\System\CurrentControlSet\Services\UserDataSvc" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKLM\System\CurrentControlSet\Services\UserDataSvc" /v "Start" /t REG_DWORD /d 4 /f
 :: UnistoreSvc
-reg add "HKLM\System\CurrentControlSet\Services\UnistoreSvc" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKLM\System\CurrentControlSet\Services\UnistoreSvc" /v "Start" /t REG_DWORD /d 4 /f
 :: WebClient
 sc config "WebClient" start= disabled
 :: Windows Remote Management (WS-Management)
@@ -1880,7 +1899,7 @@ sc config "WSearch" start= disabled
 :: Changing default povider is sufficent enough.
 :: sc config "W32Time" start= disabled
 :: WinHTTP Web Proxy Auto-Discovery Service
-reg add "HKLM\System\CurrentControlSet\Services\WinHttpAutoProxySvc" /v "Start" /t REG_DWORD /d "4" /f
+reg add "HKLM\System\CurrentControlSet\Services\WinHttpAutoProxySvc" /v "Start" /t REG_DWORD /d 4 /f
 :: Workstation
 sc config "LanmanWorkstation" start= disabled
 ::##########################################################################################################################
@@ -1907,20 +1926,19 @@ reg add "HKCU\Software\Microsoft\TabletTip\1.7" /v "EnableDoubleTapSpace" /t REG
 :: Mouse Keys
 :: 254 - Disable
 :: 255 - Default
-reg add "HKCU\Control Panel\Accessibility\MouseKeys" /v "Flags" /t REG_SZ /d "254" /f
+reg add "HKCU\Control Panel\Accessibility\MouseKeys" /v "Flags" /t REG_SZ /d 254 /f
 :: Sticky Keys
 :: 26 - Disable All
 :: 511 - Default
-reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_SZ /d "26" /f
+reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_SZ /d 26 /f
 :: Toggle Keys
 :: 58 - Disable All
 :: 63 - Default
-reg add "HKCU\Control Panel\Accessibility\ToggleKeys" /v "Flags" /t REG_SZ /d "58" /f
+reg add "HKCU\Control Panel\Accessibility\ToggleKeys" /v "Flags" /t REG_SZ /d 58 /f
 :: Disable Windows Key Hotkeys
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "NoWinKeys" /t REG_DWORD /d 1 /f
-:: Disable specific Windows Key Hotkeys only
-:: E.g. Win+R
-:: reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "DisabledHotkeys" /t REG_EXPAND_SZ /d "R" /f
+:: Disable specific Windows Key Hotkeys only e.g. Win+R
+:: reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "DisabledHotkeys" /t REG_EXPAND_SZ /d R /f
 ::
 ::##########################################################################################################################
 :: Cortana Master Toggles
@@ -1941,7 +1959,7 @@ reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "AllowCorta
 reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "AllowCortanaAboveLock" /t REG_DWORD /d 0 /f
 reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "AllowIndexingEncryptedStoresOrItems" /t REG_DWORD /d 0 /f
 reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "AllowSearchToUseLocation" /t REG_DWORD /d 0 /f
-reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchPrivacy" /t REG_DWORD /d "3" /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchPrivacy" /t REG_DWORD /d 3 /f
 reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWeb" /t REG_DWORD /d 0 /f
 reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWebOverMeteredConnections" /t REG_DWORD /d 0 /f
 reg add "HKLM\Software\Policies\Microsoft\Windows\Windows Search" /v "DisableWebSearch" /t REG_DWORD /d 1 /f
@@ -2036,9 +2054,9 @@ reg add "HKCU\Control Panel\International" /v "sYearMonth" /t REG_SZ /d "MMMM yy
 :: Advanced key settings
 :: Change Key Sequence
 :: 3 - Not assigned / 2 - CTRL+SHIFT / 1 - Left ALT+SHIFT
-:: reg add "HKCU\Keyboard Layout\Toggle" /v "Language Hotkey" /t REG_SZ /d "3" /f
-:: reg add "HKCU\Keyboard Layout\Toggle" /v "Hotkey" /t REG_SZ /d "3" /f
-:: reg add "HKCU\Keyboard Layout\Toggle" /v "Layout Hotkey" /t REG_SZ /d "3" /f
+:: reg add "HKCU\Keyboard Layout\Toggle" /v "Language Hotkey" /t REG_SZ /d 3 /f
+:: reg add "HKCU\Keyboard Layout\Toggle" /v "Hotkey" /t REG_SZ /d 3 /f
+:: reg add "HKCU\Keyboard Layout\Toggle" /v "Layout Hotkey" /t REG_SZ /d 3 /f
 :: Enable Num Lock on Sign-in Screen / 2147483648 - Disable
 :: reg add "HKCU\Control Panel\Keyboard" /v "InitialKeyboardIndicators" /t REG_SZ /d 2 /f
 :: reg add "HKU\.DEFAULT\Control Panel\Keyboard" /v "InitialKeyboardIndicators" /t REG_SZ /d 2 /f
@@ -2083,5 +2101,9 @@ powercfg -duplicatescheme a1841308-3541-4fab-bc81-f71556f20b4a
 ::
 :: High performance
 :: powercfg -duplicatescheme 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
+::
+:: Disable Hibernate Mode
+:: https://docs.microsoft.com/en-us/troubleshoot/windows-client/deployment/disable-and-re-enable-hibernation
+powercfg -h off
 ::
 ::
