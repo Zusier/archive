@@ -1,9 +1,13 @@
+# System Power States
+
 It may appear to the normal user as if it is either on or off, but there are many different classes of power states that are used to lower the power used when there are minimal need for it to be at full power.
 
 ## P-States
+
 P-States, also known as Power Performance States scale the current frequency and voltage. The number of available P-States depends on the processor. The higher number the P-State is, the lower the frequency, voltage and power consumption will be.
 
 ### Forcing P0 on Nvidia GPUs (credit: Chrometastic)
+
 Locking your GPU allows you to never downclock, which may cause heating issues. Do this at your own risk.
 
 **If you have any games open, close them.**
@@ -23,9 +27,11 @@ Usually it will show P8, you want it to say P0. If it says P0, you don't have to
 
 
 ## C-States
-C-States lower power usage by powering down subsystems, here is the list of C-States:
+
+C-States lower power usage by powering down subsystems, here is a compiled list of C-States:
 
 ### Main C-States
+
 - C0: Active, if also at P0, operating at maximum performance.
 - C1: Halted, can resume instantaneously. P0 and up only matter at C0
   - Core Clock: Off
@@ -38,8 +44,10 @@ C-States lower power usage by powering down subsystems, here is the list of C-St
   - L1/L2 Cache: Flushed
 
 ### Modern C-States
+
 In modern CPUs, there are more than just package (CPU) states and there are Core and Thread states.
 Modern CPUs have more C-States, here is a list:
+
 - C1E: C1, but running at the lowest frequency and voltage.
 - C4E/C5: Reduces voltage even more and turns off the memory cache
 - C6: Save states before shutdown, shutdown.
@@ -47,7 +55,9 @@ Modern CPUs have more C-States, here is a list:
 - C8: C7 but LLC must be flushed.
 
 ## S-States
+
 S-States, or sleep states are OS controlled states. You may recognize it as Sleep or Hibernate. S1-S3 are known as sleep and S4 is known as Hibernate.
+
 - S0: Similar to C0, this is when it is running at max performance.
 - S1: Low latency wake state (Sleep)
   - Power is still provided to CPU and RAM
@@ -70,10 +80,8 @@ By running the following command in command prompt, you will find all the states
 
 `powercfg /a`
 
-
-
-
 ## References
+
 - [A Minimum Complete Tutorial of CPU Power Management](https://metebalci.com/blog/a-minimum-complete-tutorial-of-cpu-power-management-c-states-and-p-states)
 - [Processor P-States and C-States](https://www.thomas-krenn.com/en/wiki/Processor_P-states_and_C-states)
 - [C-States, P-States, and S-States](https://www.technikaffe.de/anleitung-32-c_states_p_states_s_states__energieverwaltung_erklaert)
